@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "name": "BasicCatalogExport",
+  "description": "Beispielplugin zur Demonstration des Katalogs in Plugins ",
+  "namespace": "BasicCatalogExport",
+  "pluginIcon": "icon_plugin_xs.png",
+  "author": "plentymarkets GmbH",
+  "email": "support@plentymarkets.eu",
+  "authorIcon": "icon_author_xs.png",
+  "shortDescription": {
+    "de": "Beispielplugin für Catalog Guide",
+    "en": "Example plugin for catalog guide"
+  },
+  "license": "AGPL-3.0",
+  "categories": [
+    3881
+  ],
+  "price": 0.00,
+  "type": "general",
+  "serviceProvider": "BasicCatalogExport\\Providers\\BasicCatalogExportServiceProvider",
+  "dependencies": {},
+  "runOnBuild": []
+}

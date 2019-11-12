@@ -29,6 +29,11 @@ class FirstBaseDataProvider extends BaseDataProvider
                 'required' => false
             ],
             [
+                'key' => 'sku',
+                'label' => 'SKU',
+                'required' => true
+            ],
+            [
                 'key' => 'price',
                 'label' => 'Price',
                 'required' => true

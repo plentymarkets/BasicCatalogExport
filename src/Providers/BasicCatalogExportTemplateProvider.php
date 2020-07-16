@@ -5,6 +5,7 @@ namespace BasicCatalogExport\Providers;
 use BasicCatalogExport\DataProviders\FirstBaseDataProvider;
 use BasicCatalogExport\DataProviders\FirstKeyDataProvider;
 use BasicCatalogExport\DataProviders\FirstNestedKeyDataProvider;
+use BasicCatalogExport\DataProviders\FirstSettingsDataProvider;
 use Plenty\Modules\Catalog\Templates\BaseTemplateProvider;
 
 /**
@@ -79,7 +80,10 @@ class BasicCatalogExportTemplateProvider extends BaseTemplateProvider
      */
     public function getSettings(): array
     {
-        return [];
+        /** @var FirstSettingsDataProvider $firstSettingsDataProvider */
+        $firstSettingsDataProvider = pluginApp(FirstSettingsDataProvider::class);
+
+        return $firstSettingsDataProvider->getSettings();
     }
 
     /**

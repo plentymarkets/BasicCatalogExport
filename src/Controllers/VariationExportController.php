@@ -3,6 +3,7 @@
 namespace BasicCatalogExport\Controllers;
 
 use BasicCatalogExport\Providers\BasicCatalogExportServiceProvider;
+use Carbon\Carbon;
 use Plenty\Modules\Catalog\Contracts\CatalogExportRepositoryContract;
 use Plenty\Modules\Catalog\Contracts\CatalogRepositoryContract;
 use Plenty\Modules\Catalog\Contracts\TemplateContainerContract;
@@ -25,12 +26,21 @@ class VariationExportController extends Controller
         foreach ($catalogs->getResult() as $catalog) {
             $template = $templateContainer->getTemplate($catalog['template']);
 
-            if ($template->getName() != BasicCatalogExportServiceProvider::PLUGIN_NAME) {
+            if ($template->getType() != BasicCatalogExportServiceProvider::PLUGIN_NAME || !$catalog['active']) {
                 continue;
             }
 
+            $catalogModel = $catalogRepository->get($catalog['id']);
+
             $exportService = $catalogExportRepository->exportById($catalog['id']);
-            // Here you can define filters etc. if needed
+            $exportService->setSettings($catalogModel->data['settings']);
+
+            // Only export variations that were updated after a specific timestamp (for example the last export)
+            //$exportService->setUpdatedSince(Carbon::now());
+
+            // Defining values for the filters of the template
+            //$exportService->setSettings(['testNumber' => 149]);
+
             $result = $exportService->getResult();
             foreach ($result as $page) {
                 //$page now contains the data of the export

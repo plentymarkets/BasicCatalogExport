@@ -45,6 +45,8 @@ class BasicCatalogExportTemplateProvider extends BaseTemplateProvider
      */
     public function getFilter(): array
     {
+        $test = true;
+
         return [
             [
                 'name' => 'item.hasIds',
@@ -52,7 +54,8 @@ class BasicCatalogExportTemplateProvider extends BaseTemplateProvider
                     [
                         'name' => 'itemIds',
                         'value' => [150]
-                        //'ref' => 'settings.testNumber
+                        //'ref' => 'settings.testNumber' //In this example this ref will not work, since the filter
+                        // expects an array and we would provide an integer. But this would be the general syntax
                     ]
                 ]
             ]

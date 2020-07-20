@@ -24,9 +24,6 @@ class FirstBaseDataProvider extends BaseDataProvider
                 'required' => true,
                 'default' => [
                     [
-                        "fieldId" => "itemText-name1",
-                        "id" => null,
-                        "isCombined" => false,
                         "key" => "name1",
                         "type" => "text",
                         "lang" => "de"
@@ -36,7 +33,11 @@ class FirstBaseDataProvider extends BaseDataProvider
             [
                 'key' => 'description',
                 'label' => 'Description',
-                'required' => false
+                'required' => false,
+                'callback' => function ($item, $value) {
+                    $test = true;
+                    return $value;
+                }
             ],
             [
                 'key' => 'sku',
@@ -56,10 +57,15 @@ class FirstBaseDataProvider extends BaseDataProvider
             [
                 'key' => 'parentSku',
                 'default' => [['type' => 'sku', 'key' => 'parentSku']],
-                'label' => 'Parent SKU',
                 'required' => false,
                 'hidden' => true,
             ],
+            [
+                'key' => 'variationId',
+                'default' => [['type' => 'variation', 'key' => 'id']],
+                'required' => false,
+                'hidden' => true,
+            ]
         ];
     }
 }

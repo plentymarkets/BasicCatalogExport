@@ -133,7 +133,7 @@ class BasicCatalogExportTemplateProvider extends BaseTemplateProvider
     public function getPreMutators(): array
     {
         return [
-            function ($value, $item) {
+            function ($item) {
                 return $item;
             }
         ];
@@ -145,7 +145,7 @@ class BasicCatalogExportTemplateProvider extends BaseTemplateProvider
     public function getPostMutators(): array
     {
         return [
-            function ($value, $item) {
+            function ($item) {
                 return $item;
             }
         ];

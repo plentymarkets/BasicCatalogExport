@@ -21,7 +21,17 @@ class FirstBaseDataProvider extends BaseDataProvider
             [
                 'key' => 'name',
                 'label' => 'Name',
-                'required' => true
+                'required' => true,
+                'default' => [
+                    [
+                        "fieldId" => "itemText-name1",
+                        "id" => null,
+                        "isCombined" => false,
+                        "key" => "name1",
+                        "type" => "text",
+                        "lang" => "de"
+                    ]
+                ]
             ],
             [
                 'key' => 'description',
@@ -42,7 +52,14 @@ class FirstBaseDataProvider extends BaseDataProvider
                 'key' => 'stockNet',
                 'label' => 'Stock',
                 'required' => true
-            ]
+            ],
+            [
+                'key' => 'parentSku',
+                'default' => [['type' => 'sku', 'key' => 'parentSku']],
+                'label' => 'Parent SKU',
+                'required' => false,
+                'hidden' => true,
+            ],
         ];
     }
 }

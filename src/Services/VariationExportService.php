@@ -31,7 +31,7 @@ class VariationExportService
             $exportService->setUpdatedSince(Carbon::now());
 
             // Defining values for the filters of the template
-            $exportService->setSettings(['marketId' => 0]);
+            //$exportService->setSettings(['testNumber' => 149]);
 
             // Returns the export result
             $result = $exportService->getResult();

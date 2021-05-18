@@ -14,14 +14,11 @@ class BasicCatalogExportServiceProvider extends ServiceProvider
 {
     const PLUGIN_NAME = "BasicCatalogExport";
 
-    public function register() {
-        try {
-            /** @var TemplateContainerContract $templateContainer */
-            $templateContainer = pluginApp(TemplateContainerContract::class);
+    public function register()
+    {
+        /** @var TemplateContainerContract $templateContainer */
+        $templateContainer = pluginApp(TemplateContainerContract::class);
 
-            $templateContainer->register("variationExport", self::PLUGIN_NAME, ExampleTemplateProvider::class);
-        } catch (\Throwable $e) {
-            //handle exception (e.g. logging)
-        }
+        $templateContainer->register("variationExport", self::PLUGIN_NAME, ExampleTemplateProvider::class);
     }
 }

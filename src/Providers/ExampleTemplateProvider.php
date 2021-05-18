@@ -4,6 +4,7 @@ namespace BasicCatalogExport\Providers;
 
 use Plenty\Modules\Catalog\Containers\Filters\CatalogFilterBuilderContainer;
 use Plenty\Modules\Catalog\Containers\TemplateGroupContainer;
+use Plenty\Modules\Catalog\Models\ComplexTemplateField;
 use Plenty\Modules\Catalog\Models\SimpleTemplateField;
 use Plenty\Modules\Catalog\Models\TemplateGroup;
 use Plenty\Modules\Catalog\Templates\Providers\AbstractGroupedTemplateProvider;
@@ -19,8 +20,10 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         /** @var TemplateGroupContainer $templateGroupContainer */
         $templateGroupContainer = pluginApp(TemplateGroupContainer::class);
 
-        /** @var TemplateGroup $templateGroup */
-        $templateGroup = pluginApp(TemplateGroup::class,
+        // Simple fields
+
+        /** @var TemplateGroup $simpleGroup */
+        $simpleGroup = pluginApp(TemplateGroup::class,
             [
                 "identifier" => "groupOne",
                 "label" => "fields" // In a productive plugin this should be translated
@@ -50,23 +53,44 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
             true
         ]);
 
-        $templateGroup->addGroupField($name);
-        $templateGroup->addGroupField($price);
-        $templateGroup->addGroupField($sku);
+        $simpleGroup->addGroupField($name);
+        $simpleGroup->addGroupField($price);
+        $simpleGroup->addGroupField($sku);
 
-        $templateGroupContainer->addGroup($templateGroup);
+        $templateGroupContainer->addGroup($simpleGroup);
+
+        // Complex field
+
+        /** @var TemplateGroup $complexGroup */
+        $complexGroup = pluginApp(TemplateGroup::class,
+            [
+                "identifier" => "groupTwo",
+                "label" => "Complex fields" // In a productive plugin this should be translated
+            ]);
+
+        /** @var ComplexTemplateField $name */
+        $category = pluginApp(ComplexTemplateField::class, [
+            'category',
+            'category',
+            'Category', // In a productive plugin this should be translated
+            pluginApp(ExampleCategoryMappingValueProvider::class),
+            true
+        ]);
+
+        $complexGroup->addGroupField($category);
+        $templateGroupContainer->addGroup($complexGroup);
 
         return $templateGroupContainer;
     }
 
     public function getFilterContainer(): CatalogFilterBuilderContainer
     {
-        return new CatalogFilterBuilderContainer();
+        return pluginApp(CatalogFilterBuilderContainer::class);
     }
 
     public function getCustomFilterContainer(): CatalogFilterBuilderContainer
     {
-        return new CatalogFilterBuilderContainer();
+        return pluginApp(CatalogFilterBuilderContainer::class);
     }
 
     public function isPreviewable(): bool

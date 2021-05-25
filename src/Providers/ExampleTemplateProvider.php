@@ -2,12 +2,17 @@
 
 namespace BasicCatalogExport\Providers;
 
+use Plenty\Modules\Catalog\Containers\CatalogTemplateFieldContainer;
 use Plenty\Modules\Catalog\Containers\Filters\CatalogFilterBuilderContainer;
 use Plenty\Modules\Catalog\Containers\TemplateGroupContainer;
+use Plenty\Modules\Catalog\Legacy\ElasticExport\Manufacturer\Templates\Standard\Filters\LegacyManufacturerFilterBuilder;
+use Plenty\Modules\Catalog\Models\CombinedTemplateField;
 use Plenty\Modules\Catalog\Models\ComplexTemplateField;
 use Plenty\Modules\Catalog\Models\SimpleTemplateField;
 use Plenty\Modules\Catalog\Models\TemplateGroup;
 use Plenty\Modules\Catalog\Templates\Providers\AbstractGroupedTemplateProvider;
+use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\VariationHasSku;
+use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\VariationIsActive;
 
 /**
  * Class ExampleTemplateProvider
@@ -26,7 +31,7 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         $simpleGroup = pluginApp(TemplateGroup::class,
             [
                 "identifier" => "groupOne",
-                "label" => "fields" // In a productive plugin this should be translated
+                "label" => "Simple fields" // In a productive plugin this should be translated
             ]);
 
         /** @var SimpleTemplateField $name */
@@ -53,9 +58,31 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
             true
         ]);
 
+        /** @var SimpleTemplateField $stock */
+        $stock = pluginApp(SimpleTemplateField::class, [
+            'stock',
+            'stock',
+            'Stock', // In a productive plugin this should be translated
+            true,
+            false,
+            false,
+            [],
+            [
+                [
+                    'fieldId' => 'stock-0',
+                    'id' => 0,
+                    'isCombined' => false,
+                    'key' => null,
+                    'type' => "stock",
+                    'value' => null
+                ]
+            ]
+        ]);
+
         $simpleGroup->addGroupField($name);
         $simpleGroup->addGroupField($price);
         $simpleGroup->addGroupField($sku);
+        $simpleGroup->addGroupField($stock);
 
         $templateGroupContainer->addGroup($simpleGroup);
 
@@ -80,12 +107,53 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         $complexGroup->addGroupField($category);
         $templateGroupContainer->addGroup($complexGroup);
 
+        // Combined field
+
+        /** @var TemplateGroup $combinedGroup */
+        $combinedGroup = pluginApp(TemplateGroup::class,
+            [
+                "identifier" => "groupThree",
+                "label" => "Combined fields" // In a productive plugin this should be translated
+            ]);
+
+        /** @var CatalogTemplateFieldContainer $simpleContainer */
+        $simpleContainer = pluginApp(CatalogTemplateFieldContainer::class);
+
+        /** @var SimpleTemplateField $name */
+        $barcode = pluginApp(SimpleTemplateField::class, [
+            'barcode',
+            'barcode',
+            'Barcode',
+            true
+        ]);
+
+        $simpleContainer->addField($barcode);
+
+        /** @var CombinedTemplateField $name */
+        $barcodeType = pluginApp(CombinedTemplateField::class, [
+            'barcodeType',
+            'barcodeType',
+            'Barcode type', // In a productive plugin this should be translated
+            pluginApp(ExampleBarcodeTypeMappingValueProvider::class),
+            $simpleContainer
+        ]);
+
+        $combinedGroup->addGroupField($barcodeType);
+        $templateGroupContainer->addGroup($combinedGroup);
+
         return $templateGroupContainer;
     }
 
     public function getFilterContainer(): CatalogFilterBuilderContainer
     {
-        return pluginApp(CatalogFilterBuilderContainer::class);
+        /** @var CatalogFilterBuilderContainer $container */
+        $container = pluginApp(CatalogFilterBuilderContainer::class);
+
+        /** @var VariationIsActive $variationIsActive */
+        $variationIsActive = pluginApp(VariationIsActive::class);
+        $container->addFilterBuilder($variationIsActive);
+
+        return $container;
     }
 
     public function getCustomFilterContainer(): CatalogFilterBuilderContainer

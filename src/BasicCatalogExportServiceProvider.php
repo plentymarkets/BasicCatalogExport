@@ -16,6 +16,8 @@ class BasicCatalogExportServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->getApplication()->register(BasicCatalogExportRouteServiceProvider::class);
+
         /** @var TemplateContainerContract $templateContainer */
         $templateContainer = pluginApp(TemplateContainerContract::class);
 

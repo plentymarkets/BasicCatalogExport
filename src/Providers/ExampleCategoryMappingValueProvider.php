@@ -64,7 +64,7 @@ class ExampleCategoryMappingValueProvider implements CatalogMappingValueProvider
 
     public function getValuesByParentId(string $parentId = null): CatalogMappingValueContainer
     {
-        $mappingValueContainer = new CatalogMappingValueContainer();
+        $mappingValueContainer = pluginApp(CatalogMappingValueContainer::class);
 
         foreach ($this->categories as $category) {
             if ($category['parentId'] != $parentId) {
@@ -91,6 +91,6 @@ class ExampleCategoryMappingValueProvider implements CatalogMappingValueProvider
      */
     public function getValues(array $params = []): CatalogMappingValueContainer
     {
-        return new CatalogMappingValueContainer();
+        return pluginApp(CatalogMappingValueContainer::class);
     }
 }

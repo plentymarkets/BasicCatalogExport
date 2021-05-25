@@ -158,11 +158,14 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
 
     public function getCustomFilterContainer(): CatalogFilterBuilderContainer
     {
+        //Todo add custom filter example
         return pluginApp(CatalogFilterBuilderContainer::class);
     }
 
     public function isPreviewable(): bool
     {
+        // If you are not sure what this does please check the guide for DynamicConfig before setting this to true
+        // In your productive plugin
         return true;
     }
 }

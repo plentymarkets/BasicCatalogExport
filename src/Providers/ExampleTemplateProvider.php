@@ -2,9 +2,11 @@
 
 namespace BasicCatalogExport\Providers;
 
+use BasicCatalogExport\DynamicConfig\ExampleDynamicConfig;
 use Plenty\Modules\Catalog\Containers\CatalogTemplateFieldContainer;
 use Plenty\Modules\Catalog\Containers\Filters\CatalogFilterBuilderContainer;
 use Plenty\Modules\Catalog\Containers\TemplateGroupContainer;
+use Plenty\Modules\Catalog\Contracts\CatalogDynamicConfigContract;
 use Plenty\Modules\Catalog\Legacy\ElasticExport\Manufacturer\Templates\Standard\Filters\LegacyManufacturerFilterBuilder;
 use Plenty\Modules\Catalog\Models\CombinedTemplateField;
 use Plenty\Modules\Catalog\Models\ComplexTemplateField;
@@ -167,5 +169,10 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         // If you are not sure what this does please check the guide for DynamicConfig before setting this to true
         // In your productive plugin
         return true;
+    }
+
+    public function getDynamicConfig(): CatalogDynamicConfigContract
+    {
+        return new ExampleDynamicConfig();
     }
 }

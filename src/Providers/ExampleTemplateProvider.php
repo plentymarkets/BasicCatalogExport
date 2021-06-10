@@ -2,17 +2,19 @@
 
 namespace BasicCatalogExport\Providers;
 
+use BasicCatalogExport\Callbacks\ExampleSkuCallback;
+use BasicCatalogExport\Mutators\ExamplePostMutator;
 use Plenty\Modules\Catalog\Containers\CatalogTemplateFieldContainer;
 use Plenty\Modules\Catalog\Containers\Filters\CatalogFilterBuilderContainer;
 use Plenty\Modules\Catalog\Containers\TemplateGroupContainer;
-use Plenty\Modules\Catalog\Legacy\ElasticExport\Manufacturer\Templates\Standard\Filters\LegacyManufacturerFilterBuilder;
+use Plenty\Modules\Catalog\Contracts\CatalogMutatorContract;
 use Plenty\Modules\Catalog\Models\CombinedTemplateField;
 use Plenty\Modules\Catalog\Models\ComplexTemplateField;
 use Plenty\Modules\Catalog\Models\SimpleTemplateField;
 use Plenty\Modules\Catalog\Models\TemplateGroup;
 use Plenty\Modules\Catalog\Templates\Providers\AbstractGroupedTemplateProvider;
-use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\VariationHasSku;
-use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\VariationIsActive;
+use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\Item\ItemHasIds;
+use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\VariationBase\VariationIsActive;
 
 /**
  * Class ExampleTemplateProvider
@@ -57,6 +59,7 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
             'SKU', // In a productive plugin this should be translated
             true
         ]);
+        $sku->setCallable(pluginApp(ExampleSkuCallback::class));
 
         /** @var SimpleTemplateField $stock */
         $stock = pluginApp(SimpleTemplateField::class, [
@@ -149,17 +152,24 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         /** @var CatalogFilterBuilderContainer $container */
         $container = pluginApp(CatalogFilterBuilderContainer::class);
 
-        /** @var VariationIsActive $variationIsActive */
-        $variationIsActive = pluginApp(VariationIsActive::class);
-        $container->addFilterBuilder($variationIsActive);
+        /** @var VariationIsActive $variationIsActiveFilter */
+        $variationIsActiveFilter = pluginApp(VariationIsActive::class);
+        $variationIsActiveFilter->setShouldBeActive(true);
+        $container->addFilterBuilder($variationIsActiveFilter);
 
         return $container;
     }
 
     public function getCustomFilterContainer(): CatalogFilterBuilderContainer
     {
-        //Todo add custom filter example
-        return pluginApp(CatalogFilterBuilderContainer::class);
+        /** @var CatalogFilterBuilderContainer $container */
+        $container = pluginApp(CatalogFilterBuilderContainer::class);
+
+        /** @var ItemHasIds $itemHasIdsFilter */
+        $itemHasIdsFilter = pluginApp(ItemHasIds::class);
+        $container->addFilterBuilder($itemHasIdsFilter);
+
+        return $container;
     }
 
     public function isPreviewable(): bool
@@ -167,5 +177,10 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         // If you are not sure what this does please check the guide for DynamicConfig before setting this to true
         // In your productive plugin
         return true;
+    }
+
+    public function getPostMutator(): CatalogMutatorContract
+    {
+        return pluginApp(ExamplePostMutator::class);
     }
 }

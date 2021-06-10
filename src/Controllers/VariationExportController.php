@@ -20,11 +20,11 @@ class VariationExportController extends Controller
             ]
         );
 
-        /** @var CatalogExportRepositoryContract $catalogExportRepository */
-        $catalogExportRepository = pluginApp(CatalogExportRepositoryContract::class);
-
         $page = 1;
         $resultArray = [];
+
+        /** @var CatalogExportRepositoryContract $catalogExportRepository */
+        $catalogExportRepository = pluginApp(CatalogExportRepositoryContract::class);
 
         do {
             $paginatedResult = $catalogRepository->all($page);

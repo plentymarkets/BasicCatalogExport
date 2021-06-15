@@ -8,12 +8,13 @@ use Plenty\Modules\Catalog\Contracts\CatalogRepositoryContract;
 use Plenty\Modules\Catalog\Contracts\TemplateContainerContract;
 use Plenty\Modules\Catalog\Models\Catalog;
 use Plenty\Plugin\Controller;
+use Plenty\Plugin\Http\Request;
 
 class VariationExportController extends Controller
 {
-    public function export()
+    public function export(Request $request)
     {
-        $filters = \Request::get('exportFilters');
+        $filters = $request->get('exportFilters');
 
         /** @var CatalogRepositoryContract $catalogRepository */
         $catalogRepository = pluginApp(CatalogRepositoryContract::class);

@@ -13,9 +13,6 @@ use Plenty\Modules\Catalog\Models\ComplexTemplateField;
 use Plenty\Modules\Catalog\Models\SimpleTemplateField;
 use Plenty\Modules\Catalog\Models\TemplateGroup;
 use Plenty\Modules\Catalog\Templates\Providers\AbstractGroupedTemplateProvider;
-use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\Item\ItemHasIds;
-use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\VariationBase\VariationIsActive;
-
 /**
  * Class ExampleTemplateProvider
  * @package BasicCatalogExport\Providers
@@ -152,10 +149,7 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         /** @var CatalogFilterBuilderContainer $container */
         $container = pluginApp(CatalogFilterBuilderContainer::class);
 
-        /** @var VariationIsActive $variationIsActiveFilter */
-        $variationIsActiveFilter = pluginApp(VariationIsActive::class);
-        $variationIsActiveFilter->setShouldBeActive(true);
-        $container->addFilterBuilder($variationIsActiveFilter);
+
 
         return $container;
     }
@@ -165,11 +159,14 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         /** @var CatalogFilterBuilderContainer $container */
         $container = pluginApp(CatalogFilterBuilderContainer::class);
 
-        /** @var ItemHasIds $itemHasIdsFilter */
-        $itemHasIdsFilter = pluginApp(ItemHasIds::class);
-        $container->addFilterBuilder($itemHasIdsFilter);
+
 
         return $container;
+    }
+
+    public function getFilter(): array
+    {
+        return [];
     }
 
     public function isPreviewable(): bool
@@ -184,3 +181,23 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
         return pluginApp(ExamplePostMutator::class);
     }
 }
+
+/*
+ {
+    "name": "variationSku.hasSku",
+    "params": [
+      {
+        "name": "accountId",
+        "value": null
+      },
+      {
+        "name": "referrerId",
+        "value": 0
+      },
+      {
+        "name": "status",
+        "value": "ACTIVE"
+      }
+    ]
+  },
+ */

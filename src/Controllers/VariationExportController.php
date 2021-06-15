@@ -5,20 +5,25 @@ namespace BasicCatalogExport\Controllers;
 use BasicCatalogExport\BasicCatalogExportServiceProvider;
 use Plenty\Modules\Catalog\Contracts\CatalogExportRepositoryContract;
 use Plenty\Modules\Catalog\Contracts\CatalogRepositoryContract;
+use Plenty\Modules\Catalog\Contracts\TemplateContainerContract;
+use Plenty\Modules\Catalog\Models\Catalog;
 use Plenty\Plugin\Controller;
 
 class VariationExportController extends Controller
 {
     public function export()
     {
+        $filters = \Request::get('exportFilters');
+
         /** @var CatalogRepositoryContract $catalogRepository */
         $catalogRepository = pluginApp(CatalogRepositoryContract::class);
         $catalogRepository->setFilters(
             [
-                'type' => BasicCatalogExportServiceProvider::PLUGIN_NAME,
-                'active' => true
+                'type' => BasicCatalogExportServiceProvider::PLUGIN_NAME
             ]
         );
+        /** @var TemplateContainerContract $templateContainer */
+        $templateContainer = pluginApp(TemplateContainerContract::class);
 
         $page = 1;
         $resultArray = [];
@@ -28,7 +33,12 @@ class VariationExportController extends Controller
 
         do {
             $paginatedResult = $catalogRepository->all($page);
+            /** @var Catalog $catalog */
             foreach ($paginatedResult->getResult() as $catalog) {
+                $template = $templateContainer->getTemplate($catalog->template);
+                foreach ($filters as $filter) {
+                    $template->addFilter($filter);
+                }
                 $exportService = $catalogExportRepository->exportById($catalog->id);
 
                 //$exportService->applyDynamicConfig(); Will run the dynamic config logic. This should be used in most scenarios

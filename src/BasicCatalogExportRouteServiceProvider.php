@@ -10,7 +10,7 @@ class BasicCatalogExportRouteServiceProvider extends RouteServiceProvider
 {
     public function map(ApiRouter $api, WebRouter $webRouter) {
         $api->version(['v1'], ['middleware' => ['oauth']], function ($router) {
-            $router->get('example/export', ['uses' => 'BasicCatalogExport\Controllers\VariationExportController@export']);
+            $router->post('example/export', ['uses' => 'BasicCatalogExport\Controllers\VariationExportController@export']);
         });
     }
 }

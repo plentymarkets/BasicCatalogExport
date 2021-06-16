@@ -15,6 +15,7 @@ use Plenty\Modules\Catalog\Models\TemplateGroup;
 use Plenty\Modules\Catalog\Templates\Providers\AbstractGroupedTemplateProvider;
 use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\Item\ItemHasIds;
 use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\VariationBase\VariationIsActive;
+use Plenty\Modules\Item\Catalog\ExportTypes\Variation\Filters\Builders\VariationFilterBuilderFactory;
 
 /**
  * Class ExampleTemplateProvider
@@ -151,9 +152,10 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
     {
         /** @var CatalogFilterBuilderContainer $container */
         $container = pluginApp(CatalogFilterBuilderContainer::class);
+        /** @var VariationFilterBuilderFactory $filterBuilderFactory */
+        $filterBuilderFactory = pluginApp(VariationFilterBuilderFactory::class);
 
-        /** @var VariationIsActive $variationIsActiveFilter */
-        $variationIsActiveFilter = pluginApp(VariationIsActive::class);
+        $variationIsActiveFilter = $filterBuilderFactory->variationIsActive();
         $variationIsActiveFilter->setShouldBeActive(true);
         $container->addFilterBuilder($variationIsActiveFilter);
 
@@ -164,9 +166,10 @@ class ExampleTemplateProvider extends AbstractGroupedTemplateProvider
     {
         /** @var CatalogFilterBuilderContainer $container */
         $container = pluginApp(CatalogFilterBuilderContainer::class);
+        /** @var VariationFilterBuilderFactory $filterBuilderFactory */
+        $filterBuilderFactory = pluginApp(VariationFilterBuilderFactory::class);
 
-        /** @var ItemHasIds $itemHasIdsFilter */
-        $itemHasIdsFilter = pluginApp(ItemHasIds::class);
+        $itemHasIdsFilter = $filterBuilderFactory->itemHasIds();
         $container->addFilterBuilder($itemHasIdsFilter);
 
         return $container;

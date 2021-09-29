@@ -5,7 +5,10 @@ namespace BasicCatalogExport\Providers;
 use BasicCatalogExport\DataProviders\FirstBaseDataProvider;
 use BasicCatalogExport\DataProviders\FirstKeyDataProvider;
 use BasicCatalogExport\DataProviders\FirstNestedKeyDataProvider;
+use Plenty\Modules\Catalog\Services\UI\Options\UIOptions;
 use Plenty\Modules\Catalog\Templates\BaseTemplateProvider;
+use BasicCatalogExport\Options\SellerIdOption;
+use BasicCatalogExport\Options\TransmitVariationTypeOption;
 
 /**
  * Class BasicCatalogExportTemplateProvider
@@ -79,7 +82,13 @@ class BasicCatalogExportTemplateProvider extends BaseTemplateProvider
      */
     public function getSettings(): array
     {
-        return [];
+        $options = new UIOptions();
+
+        $options
+            ->add(new TransmitVariationTypeOption)
+            ->add(new SellerIdOption);
+
+        return $options->toArray();
     }
 
     /**

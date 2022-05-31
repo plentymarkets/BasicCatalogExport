@@ -31,7 +31,7 @@ class ExampleDynamicConfig implements CatalogDynamicConfigContract
         // In a real scenario we will probably have some conditions here
 
         // This will remove all keys from the export that are not specifically stated in here
-        $catalogExportService->allowExportKeys('sku', 'stock');
+        $catalogExportService->allowExportKeys('sku');
     }
 
     /**
